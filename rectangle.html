@@ -1,0 +1,116 @@
+<!-- Jakeb Puffer
+      301313164   -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asn2</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <section class="jumbotron text-center">
+        <h2>Enter information about the rectange you want to add to the database.</h2>
+        <h3>Then, select an option for displaying the rectangles in the database.</h3>
+    </section>
+    
+    <fieldset style="margin-left: 10px; margin-right: 10px;">
+        <section class = "form-group">
+            <label for="RectName">Name of rectangle (optional):</label>
+            <input type = "text" placeholder = "Rectangle name (optional)" name = "RectName" id = "NameInput" class="form-control" style="width:25%"/>
+        </section>
+        <section class = "form-group">
+            <label for="HeightInput">Enter a number for the height of the rectangle:</label>
+            <input type = "number"  name = "RectHeight" id = "HeightInput" class="form-control" style="width:25%"/>
+        </section>
+        <section class = "form-group">
+            <label for="WidthInput">Enter a number for the width of the rectangle:</label>
+            <input type = "number" name = "RectWidth" id = "WidthInput" class="form-control" style="width:25%"/> 
+        </section>
+        <section class = "form-group">
+            <label for="ColourInput">Choose a colour for the rectangle:</label>
+            <input type = "color"  name = "RectColour" id = "ColourInput" class="form-control" style="width:25%"/> 
+        </section>
+        <section class = "form-group">
+            <label for="OpacityInput">Choose the opacity of the rectangle (0% to 100%):</label>
+            <input type = "range" name = "RectOpacity" id = "OpacityInput" class="form-control" min="0" max="100" step="1" style="width:25%"/> 
+            <p id="opacityValue"></p>
+        </section>
+        <button type = "submit" id = "SubmitButton" class = "btn btn-primary" style="margin-bottom:15px">Submit</button>
+        <br>
+        <table style="width:100%" id = "UserTable" class="table-bordered">
+            <thead> 
+                <tr>
+                    <th style="font-size: large">ID</th>
+                    <th style="font-size: large">Name</th>
+                    <th style="font-size: large">Height</th>
+                    <th style="font-size: large">Width</th>
+                    <th style="font-size: large">Colour</th>
+                    <th style="font-size: large">Opacity</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+        
+
+        <section class="container" style="margin-left: 0; padding-left: 0;">
+            <h3>Display all rectangles:</h3>
+            <div class="col-sm">
+                <button onclick="inOrder()" class = "btn btn-primary" style = "margin-bottom: 10px;">In order of ID</button>
+            </div>
+            <div class="col-sm">
+                <button onclick="groupByColour()" class = "btn btn-primary" style = "margin-bottom: 10px;">Group by color</button>
+            </div>
+            <br>
+        </section>
+        
+        <section class="jumbotron text-center">
+            <h2>Enter the ID of the rectangle you wish to edit and press Enter.</h1>
+            <h3>To update, edit the values in the attribute fields below and press Update. To delete, re-enter the ID underneath the attribute fields then press DELETE.</h2>
+        </section>
+
+        <section class = "form-group">
+            <label for="selectID">Enter the ID of the rectangle you would like to edit:</label>
+            <input type = "number"  name = "selectID" id = "selectID" class="form-control" style="width:25%"/>
+        </section>
+        <button type = "submit" id = "EnterID" class = "btn btn-success" style="margin-bottom:15px">Enter</button>
+        <br>
+        <section class = "form-group">
+            <label for="RectName">Update rectangle name:</label>
+            <input type = "text" placeholder = "Rectangle name (optional)" name = "UpdateName" id = "NameUpdate" class="form-control" style="width:25%"/>
+        </section>
+        <section class = "form-group">
+            <label for="HeightInput">Update rectangle height:</label>
+            <input type = "number"  name = "UpdateHeight" id = "HeightUpdate" class="form-control" style="width:25%"/>
+        </section>
+        <section class = "form-group">
+            <label for="WidthInput">Update rectangle width:</label>
+            <input type = "number" name = "UpdateWidth" id = "WidthUpdate" class="form-control" style="width:25%"/> 
+        </section>
+        <section class = "form-group">
+            <label for="ColourInput">Update rectangle colour:</label>
+            <input type = "color"  name = "UpdateColour" id = "ColourUpdate" class="form-control" style="width:25%"/> 
+        </section>
+        <section class = "form-group">
+            <label for="OpacityInput">Update rectangle opacity:</label>
+            <input type = "range" name = "UpdateOpacity" id = "OpacityUpdate" class="form-control" min="0" max="100" step="1" style="width:25%"/> 
+            <p id="updateOpacityValue"></p>
+        </section>
+        <button type = "submit" id = "UpdateButton" class = "btn btn-primary" style="margin-bottom:15px">Update</button>
+        <br>
+
+        <section class = "form-group">
+            <label for="deleteID">Re-enter the ID of the rectangle to confirm you want to delete it:</label>
+            <input type = "number"  name = "deleteID" id = "deleteID" class="form-control" style="width:25%"/>
+        </section>
+        <button type = "submit" id = "DeleteButton" class = "btn btn-danger" style="margin-bottom:15px">DELETE</button>
+
+    </fieldset>
+    
+    
+    <script type = "text/javascript" src = "rectangle.js"></script>
+</body>
+</html>
