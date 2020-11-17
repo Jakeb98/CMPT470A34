@@ -1,5 +1,10 @@
-var ageArray = [];
-var id = 1;
+var nextID = 1;
+
+
+
+
+
+// adding rect to db
 document.getElementById("SubmitButton").addEventListener("click", function() {
     var name, height, width, colour, opacity;
     name = document.getElementById("NameInput");
@@ -14,7 +19,23 @@ document.getElementById("SubmitButton").addEventListener("click", function() {
     }
     else
     {
+        //send to db
+        var params = {
+            ID: `${nextID}`,
+            Name: `${name.value}`,
+            Height: `${height.value}`,
+            Width: `${width.value}`,
+            Colour: `${colour.value}`,
+            Opacity: `${opacity.value}`
+        };
+        console.log(params);
+        var request = new XMLHttpRequest();
+        request.open("POST", "/addRect", true);
+        request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify(params));
+        
         addToTable(name.value, height.value, width.value, colour.value, opacity.value);
+        nextID++;
         name.value = "";
         height.value = "";
         width.value = "";
@@ -23,8 +44,10 @@ document.getElementById("SubmitButton").addEventListener("click", function() {
     }
 }); 
 
+// fetching rect from db
 document.getElementById("EnterID").addEventListener("click", function() {
-    var name, height, width, colour, opacity;
+    var id, name, height, width, colour, opacity;
+    id = document.getElementById("selectID").value;
     name = document.getElementById("NameUpdate");
     height = document.getElementById("HeightUpdate");
     width = document.getElementById("WidthUpdate");
@@ -33,14 +56,27 @@ document.getElementById("EnterID").addEventListener("click", function() {
 
     // TODO
     // send request to server for row matching ID, then populate fields
-
-    // name.value = //queried value
-    // height.value = //queried value
-    // width.value = //queried value
-    // colour.value = //queried value
-    // opacity.value = //queried value
+    var fetched;
+    var request = new XMLHttpRequest();
+    request.open("POST", "/fetchRect", false);
+    request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+    request.onload = function() {
+        console.log(this.response);
+        fetched = JSON.parse(this.response);
+        console.log(fetched);
+    };
+    request.send(JSON.stringify({ID: `${id}`}));
+    
+    console.log(fetched);
+    name.value = fetched.Name;
+    height.value = fetched.Height;
+    width.value = fetched.Width;
+    colour.value = fetched.Colour;
+    opacity.value = fetched.Opacity;
+    updateOpac();
 }); 
 
+// updating rect in db
 document.getElementById("UpdateButton").addEventListener("click", function() {
     var id, name, height, width, colour, opacity;
     id = document.getElementById("selectID");
@@ -61,6 +97,7 @@ document.getElementById("UpdateButton").addEventListener("click", function() {
     opacity.value = "50";
 }); 
 
+// deleting rect from db
 document.getElementById("DeleteButton").addEventListener("click", function() {
     var id, confirmID, name, height, width, colour, opacity;
     id = document.getElementById("selectID");
@@ -101,7 +138,7 @@ function addToTable(name, height, width, colour, opacity)
     var newColour = newRow.insertCell(4);
     var newOpacity = newRow.insertCell(5);
 
-    newID.innerHTML = id++;
+    newID.innerHTML = nextID;
     newName.innerHTML = name;
     newHeight.innerHTML = height;
     newWidth.innerHTML = width;
@@ -109,45 +146,39 @@ function addToTable(name, height, width, colour, opacity)
     newOpacity.innerHTML = opacity + "%";
 }
 
-function calculateAge(birthday)
-{
-    var today = new Date();
-    var birthDate = new Date(birthday);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
-    if (age < 0){
-        return 0;
-    }
-    return age;
-}
+function deleteRow(id/*, givenValue*/) {
+    var givenValue = document.getElementById("blah").value;
+    var td = $("#" + id + " td");
+    $.each(td, function(i) {
+        console.log(i);
+      if ($(td[i]).text() === givenValue && i%6 === 0) {
+        $(td[i]).parent().remove();
+      } 
+    });
+  }
 
-function averageAge() {
-    var total = 0;
-    for (i = 0; i < ageArray.length; i++){
-        total += ageArray[i];
-    }
-    return total/ageArray.length;
-}
 
-var newSlider = document.getElementById("OpacityInput");
-var newOutput = document.getElementById("opacityValue");
-newOutput.innerHTML = newSlider.value + "%"; // Display the default slider value
 
-// Update the current slider value (each time you drag the slider handle)
-newSlider.oninput = function() {
-  newOutput.innerHTML = this.value + "%";
-}
-
-var updateSlider = document.getElementById("OpacityUpdate");
-var updateOutput = document.getElementById("updateOpacityValue");
-updateOutput.innerHTML = updateSlider.value + "%"; // Display the default slider value
+  var newSlider = document.getElementById("OpacityInput");
+  var newOutput = document.getElementById("opacityValue");
+  newOutput.innerHTML = newSlider.value + "%"; // Display the default slider value
+  
+  // Update the current slider value (each time you drag the slider handle)
+  newSlider.oninput = function() {
+    newOutput.innerHTML = this.value + "%";
+  }
+  
+  var updateSlider = document.getElementById("OpacityUpdate");
+  var updateOutput = document.getElementById("updateOpacityValue");
+  updateOutput.innerHTML = updateSlider.value + "%"; // Display the default slider value
 
 // Update the current slider value (each time you drag the slider handle)
 updateSlider.oninput = function() {
-  updateOutput.innerHTML = this.value + "%";
+    updateOutput.innerHTML = this.value + "%";
+};
+
+function updateOpac() {
+  updateOutput.innerHTML = updateSlider.value + "%";
 }
 
 function inOrder() {
@@ -158,59 +189,3 @@ function groupByColour() {
     
 }
 
-// /* Obtained from: https://www.w3schools.com/howto/howto_js_sort_table.asp on 2020-10-16
-//    Title: "How TO - Sort a Table", subsection: "Sort Table by Clicking the Headers" */
-// function sortTable(n) {
-//     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-//     table = document.getElementById("UserTable");
-//     switching = true;
-//     // Set the sorting direction to ascending:
-//     dir = "asc";
-//     /* Make a loop that will continue until
-//     no switching has been done: */
-//     while (switching) {
-//       // Start by saying: no switching is done:
-//       switching = false;
-//       rows = table.rows;
-//       /* Loop through all table rows (except the
-//       first, which contains table headers): */
-//       for (i = 1; i < (rows.length - 1); i++) {
-//         // Start by saying there should be no switching:
-//         shouldSwitch = false;
-//         /* Get the two elements you want to compare,
-//         one from current row and one from the next: */
-//         x = rows[i].getElementsByTagName("TD")[n];
-//         y = rows[i + 1].getElementsByTagName("TD")[n];
-//         /* Check if the two rows should switch place,
-//         based on the direction, asc or desc: */
-//         if (dir == "asc") {
-//           if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-//             // If so, mark as a switch and break the loop:
-//             shouldSwitch = true;
-//             break;
-//           }
-//         } else if (dir == "desc") {
-//           if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-//             // If so, mark as a switch and break the loop:
-//             shouldSwitch = true;
-//             break;
-//           }
-//         }
-//       }
-//       if (shouldSwitch) {
-//         /* If a switch has been marked, make the switch
-//         and mark that a switch has been done: */
-//         rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-//         switching = true;
-//         // Each time a switch is done, increase this count by 1:
-//         switchcount ++;
-//       } else {
-//         /* If no switching has been done AND the direction is "asc",
-//         set the direction to "desc" and run the while loop again. */
-//         if (switchcount == 0 && dir == "asc") {
-//           dir = "desc";
-//           switching = true;
-//         }
-//       }
-//     }
-//   }

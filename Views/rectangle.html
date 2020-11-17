@@ -32,7 +32,16 @@
         </section>
         <section class = "form-group">
             <label for="ColourInput">Choose a colour for the rectangle:</label>
-            <input type = "color"  name = "RectColour" id = "ColourInput" class="form-control" style="width:25%"/> 
+            <select name = "RectColour" id = "ColourInput" class="form-control" style="width:25%">
+                <option value="#0000ff">Blue</option>
+                <option value="#ff0000">Red</option>
+                <option value="#008000">Green</option>
+                <option value="#ffff00">Yellow</option>
+                <option value="#800080">Purple</option>
+                <option value="#ffc0cb">Pink</option>
+                <option value="#000000">Black</option>
+                <option value="#ffffff">White</option>
+            </select>
         </section>
         <section class = "form-group">
             <label for="OpacityInput">Choose the opacity of the rectangle (0% to 100%):</label>
@@ -54,7 +63,8 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        
+        <input type="number" id="blah"/>
+        <button type='submit' onclick="deleteRow('UserTable')"></button>
 
         <section class="container" style="margin-left: 0; padding-left: 0;">
             <h3>Display all rectangles:</h3>
@@ -67,6 +77,7 @@
             <br>
         </section>
         
+        <!-- Updating-->
         <section class="jumbotron text-center">
             <h2>Enter the ID of the rectangle you wish to edit and press Enter.</h1>
             <h3>To update, edit the values in the attribute fields below and press Update. To delete, re-enter the ID underneath the attribute fields then press DELETE.</h2>
@@ -92,10 +103,19 @@
         </section>
         <section class = "form-group">
             <label for="ColourInput">Update rectangle colour:</label>
-            <input type = "color"  name = "UpdateColour" id = "ColourUpdate" class="form-control" style="width:25%"/> 
+            <select name = "UpdateColour" id = "ColourUpdate" class="form-control" style="width:25%">
+                <option value="#0000ff">Blue</option>
+                <option value="#ff0000">Red</option>
+                <option value="#008000">Green</option>
+                <option value="#ffff00">Yellow</option>
+                <option value="#800080">Purple</option>
+                <option value="#ffc0cb">Pink</option>
+                <option value="#000000">Black</option>
+                <option value="#ffffff">White</option>
+            </select>
         </section>
         <section class = "form-group">
-            <label for="OpacityInput">Update rectangle opacity:</label>
+            <label for="OpacityUpdate">Update rectangle opacity:</label>
             <input type = "range" name = "UpdateOpacity" id = "OpacityUpdate" class="form-control" min="0" max="100" step="1" style="width:25%"/> 
             <p id="updateOpacityValue"></p>
         </section>
