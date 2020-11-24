@@ -34,7 +34,7 @@ document.getElementById("SubmitButton").addEventListener("click", function() {
         request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
         request.send(JSON.stringify(params));
         
-        addToTable(name.value, height.value, width.value, colour.value, opacity.value);
+        addToTable(-1, name.value, height.value, width.value, colour.value, opacity.value);
         nextID++;
         name.value = "";
         height.value = "";
@@ -58,22 +58,24 @@ document.getElementById("EnterID").addEventListener("click", function() {
     // send request to server for row matching ID, then populate fields
     var fetched;
     var request = new XMLHttpRequest();
-    request.open("POST", "/fetchRect", false);
+    request.open("POST", "/fetchRect", true);
     request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
     request.onload = function() {
-        console.log(this.response);
+      //  console.log(this.response);
         fetched = JSON.parse(this.response);
-        console.log(fetched);
+       // console.log(fetched);
+       name.value = fetched.Name;
+        height.value = fetched.Height;
+        width.value = fetched.Width;
+        colour.value = fetched.Colour;
+        opacity.value = fetched.Opacity;
+        updateOpac();
     };
     request.send(JSON.stringify({ID: `${id}`}));
     
-    console.log(fetched);
-    name.value = fetched.Name;
-    height.value = fetched.Height;
-    width.value = fetched.Width;
-    colour.value = fetched.Colour;
-    opacity.value = fetched.Opacity;
-    updateOpac();
+   // console.log(fetched);
+    
+   
 }); 
 
 // updating rect in db
@@ -88,7 +90,29 @@ document.getElementById("UpdateButton").addEventListener("click", function() {
 
     // TODO
     // send values to server to update row in db
+    if (height.value == "" || width.value == "" || colour.value == "" || opacity.value == "")
+    {
+        window.alert("Please enter a valid height, width, colour, and opacity to update.");
+    }
+        
+    else {
+        var params = {
+            ID: `${id.value}`,
+            Name: `${name.value}`,
+            Height: `${height.value}`,
+            Width: `${width.value}`,
+            Colour: `${colour.value}`,
+            Opacity: `${opacity.value}`
+        };
+        deleteRow("UserTable", parseInt(id.value));
+        addToTable(id.value, name.value, height.value, width.value, colour.value, opacity.value);
 
+        var request = new XMLHttpRequest();
+        request.open("POST", "/updateRect", true);
+        request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify(params));
+    }
+    
     id.value = "";
     name.value = "";
     height.value = "";
@@ -115,6 +139,21 @@ document.getElementById("DeleteButton").addEventListener("click", function() {
 
         // TODO
         // send ID to server to delete row
+        //send to db
+        var params = {
+            ID: `${nextID}`,
+            Name: `${name.value}`,
+            Height: `${height.value}`,
+            Width: `${width.value}`,
+            Colour: `${colour.value}`,
+            Opacity: `${opacity.value}`
+        };
+        var request = new XMLHttpRequest();
+        request.open("POST", "/deleteRect", true);
+        request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify(params));
+
+        deleteRow("UserTable", parseInt(id.value));
 
         id.value = "";
         name.value = "";
@@ -122,12 +161,13 @@ document.getElementById("DeleteButton").addEventListener("click", function() {
         width.value = "";
         colour.value = "#000000";
         opacity.value = "50";
+        confirmID.value = "";
     }
 
         
 }); 
 
-function addToTable(name, height, width, colour, opacity)
+function addToTable(id, name, height, width, colour, opacity)
 {
     var table = document.getElementById("tableBody");
     var newRow = table.insertRow(-1);
@@ -138,23 +178,27 @@ function addToTable(name, height, width, colour, opacity)
     var newColour = newRow.insertCell(4);
     var newOpacity = newRow.insertCell(5);
 
-    newID.innerHTML = nextID;
+    newID.innerHTML = id > 0 ? id : nextID;
     newName.innerHTML = name;
     newHeight.innerHTML = height;
     newWidth.innerHTML = width;
     newColour.style.backgroundColor = colour;
     newOpacity.innerHTML = opacity + "%";
+    id > 0 ? console.log(`Updated id ${id}`) : console.log("adding");
 }
 
-function deleteRow(id/*, givenValue*/) {
-    var givenValue = document.getElementById("blah").value;
+function deleteRow(id, givenValue) {
+    //var givenValue = document.getElementById("blah").value;
+    console.log(givenValue);
+    console.log(typeof givenValue);
     var td = $("#" + id + " td");
     $.each(td, function(i) {
         console.log(i);
-      if ($(td[i]).text() === givenValue && i%6 === 0) {
+      if ($(td[i]).text() == givenValue && i%6 === 0) {
         $(td[i]).parent().remove();
       } 
     });
+    console.log("DELETED");
   }
 
 

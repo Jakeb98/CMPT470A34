@@ -48,4 +48,8 @@ app.post('/deleteRect', (req, res) => {
 
 app.use('/', express.static('.', {index: "Views/rectangle.html"}))
 
+// app.get('/', function(req, res){
+//     res.sendFile('rectangle.html', { root: __dirname + "/Views" } );
+// });
+
 app.listen(3000, () => {console.log("listening to port 3000")});
