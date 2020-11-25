@@ -11,23 +11,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body id="main" style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px">
     <section class="jumbotron text-center">
-        <h2>Enter information about the rectange you want to add to the database.</h2>
-        <h3>Then, select an option for displaying the rectangles in the database.</h3>
+        <h2>Enter information about the rectangle you want to add to the database.</h2>
+        <h3>You can see the rectangles in the table, or you can display them by clicking the "Display" button. The rectangles will be at the bottom of the page</h3>
     </section>
     
-    <fieldset style="margin-left: 10px; margin-right: 10px;">
+    <fieldset>
         <section class = "form-group">
             <label for="RectName">Name of rectangle (optional):</label>
             <input type = "text" placeholder = "Rectangle name (optional)" name = "RectName" id = "NameInput" class="form-control" style="width:25%"/>
         </section>
         <section class = "form-group">
-            <label for="HeightInput">Enter a number for the height of the rectangle:</label>
+            <label for="HeightInput">Enter a number for the height of the rectangle (in px):</label>
             <input type = "number"  name = "RectHeight" id = "HeightInput" class="form-control" style="width:25%"/>
         </section>
         <section class = "form-group">
-            <label for="WidthInput">Enter a number for the width of the rectangle:</label>
+            <label for="WidthInput">Enter a number for the width of the rectangle (in px):</label>
             <input type = "number" name = "RectWidth" id = "WidthInput" class="form-control" style="width:25%"/> 
         </section>
         <section class = "form-group">
@@ -45,11 +45,12 @@
         </section>
         <section class = "form-group">
             <label for="OpacityInput">Choose the opacity of the rectangle (0% to 100%):</label>
-            <input type = "range" name = "RectOpacity" id = "OpacityInput" class="form-control" min="0" max="100" step="1" style="width:25%"/> 
+            <input type = "range" name = "RectOpacity" id = "OpacityInput" class="form-control" min="0" max="100" value="100" step="1" style="width:25%"/> 
             <p id="opacityValue"></p>
         </section>
         <button type = "submit" id = "SubmitButton" class = "btn btn-primary" style="margin-bottom:15px">Submit</button>
         <br>
+        <p style="font-size: x-large; font: bold;">Rectangles in database:</p>
         <table style="width:100%" id = "UserTable" class="table-bordered">
             <thead> 
                 <tr>
@@ -63,17 +64,13 @@
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <input type="number" id="blah"/>
-        <button type='submit' onclick="deleteRow('UserTable', 2)"></button>
+
 
         <section class="container" style="margin-left: 0; padding-left: 0;">
             <h3>Display all rectangles:</h3>
-            <div class="col-sm">
-                <button onclick="inOrder()" class = "btn btn-primary" style = "margin-bottom: 10px;">In order of ID</button>
-            </div>
-            <div class="col-sm">
-                <button onclick="groupByColour()" class = "btn btn-primary" style = "margin-bottom: 10px;">Group by color</button>
-            </div>
+            
+                <button onclick="wantToDisplay(1)" class = "btn btn-primary" style = "margin-bottom: 10px;">Display</button>
+            
             <br>
         </section>
         
@@ -116,7 +113,7 @@
         </section>
         <section class = "form-group">
             <label for="OpacityUpdate">Update rectangle opacity:</label>
-            <input type = "range" name = "UpdateOpacity" id = "OpacityUpdate" class="form-control" min="0" max="100" step="1" style="width:25%"/> 
+            <input type = "range" name = "UpdateOpacity" id = "OpacityUpdate" class="form-control" min="0" max="100" value="100" step="1" style="width:25%"/> 
             <p id="updateOpacityValue"></p>
         </section>
         <button type = "submit" id = "UpdateButton" class = "btn btn-primary" style="margin-bottom:15px">Update</button>
