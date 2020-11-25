@@ -1,3 +1,6 @@
+// Jakeb Puffer
+// 301313164
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const db = require("mysql");
@@ -43,10 +46,10 @@ app.get('/initialFetch', (req, response) => {
                     Colour: res[i].Colour,
                     Opacity: res[i].Opacity
                 });
-              //  console.log(rectsInDB[i]);
+
             }
         }
-        //waiting = true;
+
         response.send(rectsInDB);
         
     });
@@ -61,7 +64,6 @@ app.get('/displayReq', (req, res) => {
 
 // wantToDisplay
 app.post('/wantToDisplay', (req, res) => {
-    console.log("reloading");
     displayOption = req.body.dispOption;
     res.send("Done");
 })
@@ -106,14 +108,14 @@ app.post('/prepResults', (req, res) => {
     con.query(queryString, (err, res) => {
         if (err) throw err;
         console.log(`Fetched ID: ${atts.ID}`);
-        //console.log(res[0]);
+
         getResult(res);
     });
     res.send("fetched");
 })
 
 app.get('/fetchRect', (req, res) => {
-   // console.log("GET FETCH")
+
     res.send(results);
 })
 
@@ -122,7 +124,7 @@ app.post('/displayRect', (req, res) => {
     var queryString = `SELECT * FROM rectangles WHERE ID = ${atts.ID};`;
     con.query(queryString, (err, result) => {
         if (err) throw err;
-       // console.log(`Displaying ID: ${atts.ID}`);
+
         res.send(result[0])
     });
 })
@@ -144,7 +146,7 @@ app.post('/updateRect', (req, res) => {
                 break;
             }
         }
-        //console.log(`Updated ID: ${atts.ID}`);
+
     });
 
 })
@@ -152,10 +154,9 @@ app.post('/updateRect', (req, res) => {
 // deleting rect from db
 app.post('/deleteRect', (req, res) => {
     var atts = req.body;
-   // console.log(atts);
+
     var queryString = `DELETE FROM rectangles WHERE ID = ${atts.ID};`;
-    console.log(`DEleteing: ${atts.ID}`)
-    console.log(typeof atts.ID);
+
     con.query(queryString, (err, res) => {
         if (err) throw err;
         for (var i = 0; i < rectsInDB.length; i++) {
@@ -170,12 +171,10 @@ app.post('/deleteRect', (req, res) => {
                 }
                 rectsInDB.pop();
                 IDsInDB.delete(parseInt(atts.ID));
-                console.log(rectsInDB);
-                console.log(IDsInDB);
                 break;
             }
         }
-       // console.log(`Deleted ID: ${atts.ID}`);
+       
     });
 })
 

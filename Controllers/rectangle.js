@@ -1,3 +1,6 @@
+// Jakeb Puffer
+// 301313164
+
 var nextID = 1;
 var currentIDs = new Map();
 
@@ -7,16 +10,10 @@ window.onload = function() {
     request.open("GET", "/initialFetch", true);
     request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
     request.onload = function() {
-        //console.log("Inital fetch")
-        //console.log(this.response);
         var rectsInDB = JSON.parse(this.response);
-        //console.log(rectsInDB.length);
-        //clearTable();
         for (var i = 0; i < rectsInDB.length; i++) {
-            //console.log(rectsInDB[i].ID);
-            //console.log(parseInt(rectsInDB[i].ID));
             currentIDs.set(parseInt(rectsInDB[i].ID), '');
-            //console.log(currentIDs);
+
             addToTable(rectsInDB[i].ID, rectsInDB[i].Name, rectsInDB[i].Height, rectsInDB[i].Width, rectsInDB[i].Colour, rectsInDB[i].Opacity);
         }
         for (var i = 0; i < currentIDs.size; i++) {
@@ -29,17 +26,11 @@ window.onload = function() {
         dispReq.open("GET", "/displayReq", true);
         dispReq.setRequestHeader("Content-type", "application/json;charset=UTF-8");
         dispReq.onload = function() {
-        var option = this.response;
-        //console.log(`DISPLAY OPTION: ${option}`);
-        if (option == "1") {
-        //    console.log("Displaying option 1");
-        //    console.log(currentIDs);
-            displayInOrder();
-        }
-        else if (option == "2") {
-            groupByColour();
-        }
+            var option = this.response;
+            if (option == "1") {
 
+                displayInOrder();
+            }
         };
         dispReq.send();
     };
@@ -78,7 +69,7 @@ document.getElementById("SubmitButton").addEventListener("click", function() {
         request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
         request.send(JSON.stringify(params));
         
-        //addToTable(-1, name.value, height.value, width.value, colour.value, opacity.value);
+    
         currentIDs.set(nextID, '');
         for (var i = 0; i < currentIDs.size; i++) {
             if (!currentIDs.has(nextID)) {
@@ -87,23 +78,14 @@ document.getElementById("SubmitButton").addEventListener("click", function() {
             nextID++;
         }
         location.reload();
-        // name.value = "";
-        // height.value = "";
-        // width.value = "";
-        // colour.value = "#000000";
-        // opacity.value = "100";
+
     }
 }); 
 
 // fetching rect from db
 document.getElementById("EnterID").addEventListener("click", function() {
-    var id /*, name, height, width, colour, opacity;*/
+    var id 
     id = document.getElementById("selectID").value;
-    // name = document.getElementById("NameUpdate");
-    // height = document.getElementById("HeightUpdate");
-    // width = document.getElementById("WidthUpdate");
-    // colour = document.getElementById("ColourUpdate");
-    // opacity = document.getElementById("OpacityUpdate");
     if (!currentIDs.has(parseInt(id))) {
         window.alert("Pick a rectangle in the database");
     }
@@ -117,15 +99,8 @@ document.getElementById("EnterID").addEventListener("click", function() {
         };
         request.send(JSON.stringify({ID: `${id}`}));
     }
-    // TODO
-    // send request to server for row matching ID, then populate fields
-    //var fetched;
 
-    
-   // console.log(fetched);
-    
-   
-}); 
+});
 
 function fetchResults() {
     var id, name, height, width, colour, opacity;
@@ -162,7 +137,6 @@ document.getElementById("UpdateButton").addEventListener("click", function() {
     colour = document.getElementById("ColourUpdate");
     opacity = document.getElementById("OpacityUpdate");
 
-    // TODO
     // send values to server to update row in db
     if (height.value == "" || width.value == "" || colour.value == "" || opacity.value == "")
     {
@@ -178,8 +152,6 @@ document.getElementById("UpdateButton").addEventListener("click", function() {
             Colour: `${colour.value}`,
             Opacity: `${opacity.value}`
         };
-        // deleteRow("UserTable", parseInt(id.value));
-        // addToTable(id.value, name.value, height.value, width.value, colour.value, opacity.value);
 
         var request = new XMLHttpRequest();
         request.open("POST", "/updateRect", true);
@@ -188,12 +160,6 @@ document.getElementById("UpdateButton").addEventListener("click", function() {
         location.reload();
     }
     
-    // id.value = "";
-    // name.value = "";
-    // height.value = "";
-    // width.value = "";
-    // colour.value = "#000000";
-    // opacity.value = "100";
 }); 
 
 // deleting rect from db
@@ -234,16 +200,7 @@ document.getElementById("DeleteButton").addEventListener("click", function() {
         request.send(JSON.stringify(params));
 
         location.reload();
-        // deleteRow("UserTable", parseInt(id.value));
-        // currentIDs.delete(parseInt(id.value));
 
-        // id.value = "";
-        // name.value = "";
-        // height.value = "";
-        // width.value = "";
-        // colour.value = "#000000";
-        // opacity.value = "100";
-        // confirmID.value = "";
     }
 
         
@@ -267,29 +224,18 @@ function addToTable(id, name, height, width, colour, opacity)
     newWidth.innerHTML = width;
     newColour.style.backgroundColor = colour;
     newOpacity.innerHTML = opacity + "%";
-    //id > 0 ? console.log(`Updated id ${id}`) : console.log("adding");
 }
 
-// function clearTable () {
-//     var tableRows = document.getElementsByTagName("td");
-//     console.log(tableRows);
-//     for (var i = 0; i < tableRows.length; i++) {
-//         tableRows[i].remove();
-//     }
-// }
 
 function deleteRow(id, givenValue) {
-    //var givenValue = document.getElementById("blah").value;
-    //console.log(givenValue);
-   // console.log(typeof givenValue);
     var td = $("#" + id + " td");
     $.each(td, function(i) {
-       // console.log(i);
+
       if ($(td[i]).text() == givenValue && i%6 === 0) {
         $(td[i]).parent().remove();
       } 
     });
-    //console.log("DELETED");
+
   }
 
 
@@ -326,33 +272,28 @@ function wantToDisplay(n) {
         request.open("POST", "/wantToDisplay", true);
         request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
         request.onload = function () {
-      //  console.log("inside req");
+
         location.reload();
 
     };
     request.send(JSON.stringify({dispOption: n}));
 
-  //  console.log("After request code");
     }
 }
 
 
 function displayInOrder() {
 
-    //console.log("displaying in order");
-    //console.log(currentIDs.keys());
     for (let id of currentIDs.keys()) {
         var fetched;
         var request = new XMLHttpRequest();
         request.open("POST", "/displayRect", true);
         request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-       // console.log("displaying");
+
         request.onload = function() {
-           // console.log(this.response);
-            // want = (this.response)[i];
-            // console.log(want);
+
             fetched = JSON.parse(this.response);
-            //console.log(fetched);
+
             var opacity = parseInt(fetched.Opacity)/100;
             var newRect = document.createElement("div");
 
