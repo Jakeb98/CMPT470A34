@@ -4,6 +4,7 @@
 var nextID = 1;
 var currentIDs = new Map();
 
+
 //inital fetch from DB
 window.onload = function() {
     var request = new XMLHttpRequest();
@@ -11,6 +12,7 @@ window.onload = function() {
     request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
     request.onload = function() {
         var rectsInDB = JSON.parse(this.response);
+	console.log(rectsInDB);
         for (var i = 0; i < rectsInDB.length; i++) {
             currentIDs.set(parseInt(rectsInDB[i].ID), '');
 
@@ -22,17 +24,9 @@ window.onload = function() {
             }
             nextID++;
         }
-        var dispReq = new XMLHttpRequest();
-        dispReq.open("GET", "/displayReq", true);
-        dispReq.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-        dispReq.onload = function() {
-            var option = this.response;
-            if (option == "1") {
 
-                displayInOrder();
-            }
-        };
-        dispReq.send();
+        displayInOrder();
+
     };
     request.send();
 
@@ -67,6 +61,9 @@ document.getElementById("SubmitButton").addEventListener("click", function() {
         var request = new XMLHttpRequest();
         request.open("POST", "/addRect", true);
         request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+	    request.onload = function () {
+	        location.reload();
+	    };
         request.send(JSON.stringify(params));
         
     
@@ -77,7 +74,6 @@ document.getElementById("SubmitButton").addEventListener("click", function() {
             }
             nextID++;
         }
-        location.reload();
 
     }
 }); 
@@ -156,16 +152,18 @@ document.getElementById("UpdateButton").addEventListener("click", function() {
         var request = new XMLHttpRequest();
         request.open("POST", "/updateRect", true);
         request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+	    request.onload = function () {
+	        location.reload();
+	    };
         request.send(JSON.stringify(params));
-        location.reload();
+
     }
     
 }); 
 
 // deleting rect from db
 document.getElementById("DeleteButton").addEventListener("click", function() {
-    var id, confirmID, name, height, width, colour, opacity;
-    id = document.getElementById("selectID");
+    var id = document.getElementById("selectID");
 
     confirmID = document.getElementById("deleteID");
     if (confirmID.value != id.value || id.value == "")
@@ -176,30 +174,19 @@ document.getElementById("DeleteButton").addEventListener("click", function() {
     {
         window.alert("Make sure the rectangle you want to delete exists");
     }
-    else {
-        name = document.getElementById("NameUpdate");
-        height = document.getElementById("HeightUpdate");
-        width = document.getElementById("WidthUpdate");
-        colour = document.getElementById("ColourUpdate");
-        opacity = document.getElementById("OpacityUpdate");
-
-        
+    else {        
         // send ID to server to delete row
         //send to db
         var params = {
-            ID: `${id.value}`,
-            Name: `${name.value}`,
-            Height: `${height.value}`,
-            Width: `${width.value}`,
-            Colour: `${colour.value}`,
-            Opacity: `${opacity.value}`
+            ID: `${id.value}`
         };
         var request = new XMLHttpRequest();
         request.open("POST", "/deleteRect", true);
         request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+	    request.onload = function () {
+	        location.reload();
+	    };
         request.send(JSON.stringify(params));
-
-        location.reload();
 
     }
 
@@ -262,24 +249,6 @@ function updateOpac() {
   updateOutput.innerHTML = updateSlider.value + "%";
 }
 
-function wantToDisplay(n) {
-    if (currentIDs.size == 0) {
-        window.alert("Enter a rectangle into the database to display it");
-    }
-    else {
-      //  console.log(`displaying option: ${n}`);
-        var request = new XMLHttpRequest();
-        request.open("POST", "/wantToDisplay", true);
-        request.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-        request.onload = function () {
-
-        location.reload();
-
-    };
-    request.send(JSON.stringify({dispOption: n}));
-
-    }
-}
 
 
 function displayInOrder() {

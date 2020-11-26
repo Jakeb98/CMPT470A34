@@ -11,12 +11,20 @@ var rectsInDB = [];
 var IDsInDB = new Map();
 var displayOption = 0;
 
+// local mysql server
+// var con = db.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "root",
+//     database: "rectangle"
+// })
 
+// remote mysql server
 var con = db.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    database: "rectangle"
+    host: "10.138.0.5",
+    user: "USER4",
+    password: "testpass",
+    database: "cmpt470"
 })
 
 con.connect((err) => {
@@ -24,15 +32,13 @@ con.connect((err) => {
     console.log("Connected to db!!");
 })
 
-
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // initial fetch from db
 app.get('/initialFetch', (req, response) => {
 
-    con.query("SELECT * FROM rectangles", (err, res) => {
+    con.query("SELECT * FROM Rectangle", (err, res) => {
         if (err) throw err;
 
         for (var i = 0; i < res.length; i++) {
@@ -56,29 +62,18 @@ app.get('/initialFetch', (req, response) => {
     
 })
 
-// display request
-app.get('/displayReq', (req, res) => {
-    res.send(displayOption.toString());
-    displayOption = 0;
-})
-
-// wantToDisplay
-app.post('/wantToDisplay', (req, res) => {
-    displayOption = req.body.dispOption;
-    res.send("Done");
-})
-
 // adding rect to db
-app.post('/addRect', (req, res) => {
+app.post('/addRect', (req, resp) => {
     var atts = req.body;
-    var queryString = `INSERT INTO rectangles VALUES (${atts.ID}, "${atts.Name}", ${atts.Height}, ${atts.Width}, "${atts.Colour}", ${atts.Opacity});`;
+    var queryString = `INSERT INTO Rectangle VALUES (${atts.ID}, "${atts.Name}", ${atts.Height}, ${atts.Width}, "${atts.Colour}", ${atts.Opacity});`;
     //query db
     con.query(queryString, (err, res) => {
         if (err) throw err;
         console.log(`Inserted ID: ${req.body.ID}`);
+	resp.send("Done");
     })
     console.log(req.body.ID);
-    res.send("Done");
+    
 })
 
 var results = {   
@@ -101,17 +96,18 @@ function getResult(res) {
 }
 
 // fetching rect from db
-app.post('/prepResults', (req, res) => {
+app.post('/prepResults', (req, resp) => {
     var atts = req.body;
     
-    var queryString = `SELECT * FROM rectangles WHERE ID = ${atts.ID};`;
+    var queryString = `SELECT * FROM Rectangle WHERE ID = ${atts.ID};`;
     con.query(queryString, (err, res) => {
         if (err) throw err;
         console.log(`Fetched ID: ${atts.ID}`);
 
         getResult(res);
+	resp.send("fetched");
     });
-    res.send("fetched");
+    
 })
 
 app.get('/fetchRect', (req, res) => {
@@ -121,7 +117,7 @@ app.get('/fetchRect', (req, res) => {
 
 app.post('/displayRect', (req, res) => {
     var atts = req.body;
-    var queryString = `SELECT * FROM rectangles WHERE ID = ${atts.ID};`;
+    var queryString = `SELECT * FROM Rectangle WHERE ID = ${atts.ID};`;
     con.query(queryString, (err, result) => {
         if (err) throw err;
 
@@ -131,9 +127,9 @@ app.post('/displayRect', (req, res) => {
 
 
 // updating rect in db
-app.post('/updateRect', (req, res) => {
+app.post('/updateRect', (req, resp) => {
     var atts = req.body;
-    var queryString = `UPDATE rectangles SET Name = "${atts.Name}", Height = ${atts.Height}, Width = ${atts.Width}, Colour = "${atts.Colour}", Opacity = ${atts.Opacity} WHERE ID = ${atts.ID};`;
+    var queryString = `UPDATE Rectangle SET Name = "${atts.Name}", Height = ${atts.Height}, Width = ${atts.Width}, Colour = "${atts.Colour}", Opacity = ${atts.Opacity} WHERE ID = ${atts.ID};`;
     con.query(queryString, (err, res) => {
         if (err) throw err;
         for (var i = 0; i < rectsInDB.length; i++) {
@@ -146,16 +142,16 @@ app.post('/updateRect', (req, res) => {
                 break;
             }
         }
-
+	resp.send("Done");
     });
 
 })
 
 // deleting rect from db
-app.post('/deleteRect', (req, res) => {
+app.post('/deleteRect', (req, resp) => {
     var atts = req.body;
 
-    var queryString = `DELETE FROM rectangles WHERE ID = ${atts.ID};`;
+    var queryString = `DELETE FROM Rectangle WHERE ID = ${atts.ID};`;
 
     con.query(queryString, (err, res) => {
         if (err) throw err;
@@ -174,7 +170,7 @@ app.post('/deleteRect', (req, res) => {
                 break;
             }
         }
-       
+       	resp.send("Done");
     });
 })
 

@@ -1,133 +1,125 @@
 <!-- Jakeb Puffer
       301313164   -->
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asn34</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body id="main" style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px">
-    <section class="jumbotron text-center">
-        <h2>Enter information about the rectangle you want to add to the database.</h2>
-        <h3>You can see the rectangles in the table, or you can display them by clicking the "Display" button. The rectangles will be at the bottom of the page</h3>
-    </section>
-    
-    <fieldset>
-        <section class = "form-group">
-            <label for="RectName">Name of rectangle (optional):</label>
-            <input type = "text" placeholder = "Rectangle name (optional)" name = "RectName" id = "NameInput" class="form-control" style="width:25%"/>
-        </section>
-        <section class = "form-group">
-            <label for="HeightInput">Enter a number for the height of the rectangle (in px):</label>
-            <input type = "number"  name = "RectHeight" id = "HeightInput" class="form-control" style="width:25%"/>
-        </section>
-        <section class = "form-group">
-            <label for="WidthInput">Enter a number for the width of the rectangle (in px):</label>
-            <input type = "number" name = "RectWidth" id = "WidthInput" class="form-control" style="width:25%"/> 
-        </section>
-        <section class = "form-group">
-            <label for="ColourInput">Choose a colour for the rectangle:</label>
-            <select name = "RectColour" id = "ColourInput" class="form-control" style="width:25%">
-                <option value="#0000ff">Blue</option>
-                <option value="#ff0000">Red</option>
-                <option value="#008000">Green</option>
-                <option value="#ffff00">Yellow</option>
-                <option value="#800080">Purple</option>
-                <option value="#ffc0cb">Pink</option>
-                <option value="#000000">Black</option>
-                <option value="#ffffff">White</option>
-            </select>
-        </section>
-        <section class = "form-group">
-            <label for="OpacityInput">Choose the opacity of the rectangle (0% to 100%):</label>
-            <input type = "range" name = "RectOpacity" id = "OpacityInput" class="form-control" min="0" max="100" value="100" step="1" style="width:25%"/> 
-            <p id="opacityValue"></p>
-        </section>
-        <button type = "submit" id = "SubmitButton" class = "btn btn-primary" style="margin-bottom:15px">Submit</button>
-        <br>
-        <p style="font-size: x-large; font: bold;">Rectangles in database:</p>
-        <table style="width:100%" id = "UserTable" class="table-bordered">
-            <thead> 
-                <tr>
-                    <th style="font-size: large">ID</th>
-                    <th style="font-size: large">Name</th>
-                    <th style="font-size: large">Height</th>
-                    <th style="font-size: large">Width</th>
-                    <th style="font-size: large">Colour</th>
-                    <th style="font-size: large">Opacity</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
-
-
-        <section class="container" style="margin-left: 0; padding-left: 0;">
-            <h3>Display all rectangles:</h3>
-            
-                <button onclick="wantToDisplay(1)" class = "btn btn-primary" style = "margin-bottom: 10px;">Display</button>
-            
-            <br>
-        </section>
-        
-        <!-- Updating-->
-        <section class="jumbotron text-center">
-            <h2>Enter the ID of the rectangle you wish to edit and press Enter.</h1>
-            <h3>To update, edit the values in the attribute fields below and press Update. To delete, re-enter the ID underneath the attribute fields then press DELETE.</h2>
-        </section>
-
-        <section class = "form-group">
-            <label for="selectID">Enter the ID of the rectangle you would like to edit:</label>
-            <input type = "number"  name = "selectID" id = "selectID" class="form-control" style="width:25%"/>
-        </section>
-        <button type = "submit" id = "EnterID" class = "btn btn-success" style="margin-bottom:15px">Enter</button>
-        <br>
-        <section class = "form-group">
-            <label for="RectName">Update rectangle name:</label>
-            <input type = "text" placeholder = "Rectangle name (optional)" name = "UpdateName" id = "NameUpdate" class="form-control" style="width:25%"/>
-        </section>
-        <section class = "form-group">
-            <label for="HeightInput">Update rectangle height:</label>
-            <input type = "number"  name = "UpdateHeight" id = "HeightUpdate" class="form-control" style="width:25%"/>
-        </section>
-        <section class = "form-group">
-            <label for="WidthInput">Update rectangle width:</label>
-            <input type = "number" name = "UpdateWidth" id = "WidthUpdate" class="form-control" style="width:25%"/> 
-        </section>
-        <section class = "form-group">
-            <label for="ColourInput">Update rectangle colour:</label>
-            <select name = "UpdateColour" id = "ColourUpdate" class="form-control" style="width:25%">
-                <option value="#0000ff">Blue</option>
-                <option value="#ff0000">Red</option>
-                <option value="#008000">Green</option>
-                <option value="#ffff00">Yellow</option>
-                <option value="#800080">Purple</option>
-                <option value="#ffc0cb">Pink</option>
-                <option value="#000000">Black</option>
-                <option value="#ffffff">White</option>
-            </select>
-        </section>
-        <section class = "form-group">
-            <label for="OpacityUpdate">Update rectangle opacity:</label>
-            <input type = "range" name = "UpdateOpacity" id = "OpacityUpdate" class="form-control" min="0" max="100" value="100" step="1" style="width:25%"/> 
-            <p id="updateOpacityValue"></p>
-        </section>
-        <button type = "submit" id = "UpdateButton" class = "btn btn-primary" style="margin-bottom:15px">Update</button>
-        <br>
-
-        <section class = "form-group">
-            <label for="deleteID">Re-enter the ID of the rectangle to confirm you want to delete it:</label>
-            <input type = "number"  name = "deleteID" id = "deleteID" class="form-control" style="width:25%"/>
-        </section>
-        <button type = "submit" id = "DeleteButton" class = "btn btn-danger" style="margin-bottom:15px">DELETE</button>
-
-    </fieldset>
-    
-    
-    <script type = "text/javascript" src = "../Controllers/rectangle.js"></script>
-</body>
-</html>
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Asn34</title>
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      </head>
+      <body id="main" style="margin-left: 10px; margin-right: 10px; margin-bottom: 10px">
+          <section class="jumbotron text-center">
+              <h2>Enter information about the rectangle you want to add to the database.</h2>
+              <h3>You can see the rectangles in the table, or you can see them displayed at the bottom of the page</h3>
+          <h4>(NOTE: When entering/updating/deleting a rectangle, the database is updated immediately and the changes should be reflected in the table immediately, but intermittently the changes will not appear. If this occurs, wait ~30s and refresh the page. If the changes are still not there, refresh every ~10s, I promise they will appear in the table)</h4>
+          </section>
+          
+          <fieldset>
+              <section class = "form-group">
+                  <label for="RectName">Name of rectangle (optional):</label>
+                  <input type = "text" placeholder = "Rectangle name (optional)" name = "RectName" id = "NameInput" class="form-control" style="width:25%"/>
+              </section>
+              <section class = "form-group">
+                  <label for="HeightInput">Enter a number for the height of the rectangle (in px):</label>
+                  <input type = "number"  name = "RectHeight" id = "HeightInput" class="form-control" style="width:25%"/>
+              </section>
+              <section class = "form-group">
+                  <label for="WidthInput">Enter a number for the width of the rectangle (in px):</label>
+                  <input type = "number" name = "RectWidth" id = "WidthInput" class="form-control" style="width:25%"/> 
+              </section>
+              <section class = "form-group">
+                  <label for="ColourInput">Choose a colour for the rectangle:</label>
+                  <select name = "RectColour" id = "ColourInput" class="form-control" style="width:25%">
+                      <option value="#0000ff">Blue</option>
+                      <option value="#ff0000">Red</option>
+                      <option value="#008000">Green</option>
+                      <option value="#ffff00">Yellow</option>
+                      <option value="#800080">Purple</option>
+                      <option value="#ffc0cb">Pink</option>
+                      <option value="#000000">Black</option>
+                      <option value="#ffffff">White</option>
+                  </select>
+              </section>
+              <section class = "form-group">
+                  <label for="OpacityInput">Choose the opacity of the rectangle (0% to 100%):</label>
+                  <input type = "range" name = "RectOpacity" id = "OpacityInput" class="form-control" min="0" max="100" value="100" step="1" style="width:25%"/> 
+                  <p id="opacityValue"></p>
+              </section>
+              <button type = "submit" id = "SubmitButton" class = "btn btn-primary" style="margin-bottom:15px">Submit</button>
+              <br>
+              <p style="font-size: x-large; font: bold;">Rectangles in database:</p>
+              <table style="width:100%" id = "UserTable" class="table-bordered">
+                  <thead> 
+                      <tr>
+                          <th style="font-size: large">ID</th>
+                          <th style="font-size: large">Name</th>
+                          <th style="font-size: large">Height</th>
+                          <th style="font-size: large">Width</th>
+                          <th style="font-size: large">Colour</th>
+                          <th style="font-size: large">Opacity</th>
+                      </tr>
+                  </thead>
+                  <tbody id="tableBody"></tbody>
+              </table>
+              
+              <!-- Updating-->
+              <section class="jumbotron text-center">
+                  <h2>Enter the ID of the rectangle you wish to edit and press Enter.</h1>
+                  <h3>To update, edit the values in the attribute fields below and press Update. To delete, re-enter the ID underneath the attribute fields then press DELETE.</h2>
+              </section>
+      
+              <section class = "form-group">
+                  <label for="selectID">Enter the ID of the rectangle you would like to edit:</label>
+                  <input type = "number"  name = "selectID" id = "selectID" class="form-control" style="width:25%"/>
+              </section>
+              <button type = "submit" id = "EnterID" class = "btn btn-success" style="margin-bottom:15px">Enter</button>
+              <br>
+              <section class = "form-group">
+                  <label for="RectName">Update rectangle name:</label>
+                  <input type = "text" placeholder = "Rectangle name (optional)" name = "UpdateName" id = "NameUpdate" class="form-control" style="width:25%"/>
+              </section>
+              <section class = "form-group">
+                  <label for="HeightInput">Update rectangle height:</label>
+                  <input type = "number"  name = "UpdateHeight" id = "HeightUpdate" class="form-control" style="width:25%"/>
+              </section>
+              <section class = "form-group">
+                  <label for="WidthInput">Update rectangle width:</label>
+                  <input type = "number" name = "UpdateWidth" id = "WidthUpdate" class="form-control" style="width:25%"/> 
+              </section>
+              <section class = "form-group">
+                  <label for="ColourInput">Update rectangle colour:</label>
+                  <select name = "UpdateColour" id = "ColourUpdate" class="form-control" style="width:25%">
+                      <option value="#0000ff">Blue</option>
+                      <option value="#ff0000">Red</option>
+                      <option value="#008000">Green</option>
+                      <option value="#ffff00">Yellow</option>
+                      <option value="#800080">Purple</option>
+                      <option value="#ffc0cb">Pink</option>
+                      <option value="#000000">Black</option>
+                      <option value="#ffffff">White</option>
+                  </select>
+              </section>
+              <section class = "form-group">
+                  <label for="OpacityUpdate">Update rectangle opacity:</label>
+                  <input type = "range" name = "UpdateOpacity" id = "OpacityUpdate" class="form-control" min="0" max="100" value="100" step="1" style="width:25%"/> 
+                  <p id="updateOpacityValue"></p>
+              </section>
+              <button type = "submit" id = "UpdateButton" class = "btn btn-primary" style="margin-bottom:15px">Update</button>
+              <br>
+      
+              <section class = "form-group">
+                  <label for="deleteID">Re-enter the ID of the rectangle to confirm you want to delete it:</label>
+                  <input type = "number"  name = "deleteID" id = "deleteID" class="form-control" style="width:25%"/>
+              </section>
+              <button type = "submit" id = "DeleteButton" class = "btn btn-danger" style="margin-bottom:15px">DELETE</button>
+      
+          </fieldset>
+          
+          
+          <script type = "text/javascript" src = "../Controllers/rectangle.js"></script>
+      </body>
+      </html>
